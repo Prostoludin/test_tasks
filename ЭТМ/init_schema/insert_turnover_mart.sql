@@ -7,10 +7,8 @@ USING (
                 ELSE 2
             END AS report_semester,
             YEAR(ctd.DataInfo) AS report_year,
-            c305.Class305_Name_Level1 AS division_name,
-            LEFT(c305.Class305_Code, 3) AS division_code,
-            c305.Class305_Name_Level2 AS product_department_name,
-            LEFT(c305.Class305_Code, 6) AS product_department_code,
+            LEFT(rdd.Class305_Code, 3) AS division_code,
+            LEFT(rdd.Class305_Code, 6) AS product_department_code,
             ctd.SalesChannel AS sales_channel,
             LEFT(c71.Class71_Code, 2) AS client_target_group,
             c71.ClassNameShort AS class_name_short,
@@ -19,7 +17,6 @@ USING (
             SUM(SumSaled) AS total_sum
     FROM STV2024071542__DWH.CliTurnoverDtl as ctd
     INNER JOIN STV2024071542__DWH.RgdDivisDprt AS rdd ON rdd.RgdCode = ctd.RgdCode
-    INNER JOIN STV2024071542__DWH.Class305 AS c305 ON c305.Class305_Code = rdd.Class305_Code
     INNER JOIN STV2024071542__DWH.DescKontrag AS dk ON dk.CliCode = ctd.CliCode
     INNER JOIN STV2024071542__DWH.Class71 AS c71 ON c71.Class71_Code = dk.Class71_Code
     INNER JOIN STV2024071542__DWH.Class37 AS c37 ON c37.Class37_Code = ctd.Class37_Code
@@ -28,9 +25,7 @@ USING (
                 report_quarter,
                 report_semester,
                 report_year,
-                division_name,
                 division_code,
-                product_department_name,
                 product_department_code,
                 sales_channel,
                 client_target_group,
@@ -42,9 +37,7 @@ ON
     AND target.report_quarter = source.report_quarter
     AND target.report_semester = source.report_semester
     AND target.report_year = source.report_year
-    AND target.division_name = source.division_name
     AND target.division_code = source.division_code
-    AND target.product_department_name = source.product_department_name
     AND target.product_department_code = source.product_department_code
     AND target.sales_channel = source.sales_channel
     AND target.client_target_group = source.client_target_group
@@ -59,9 +52,7 @@ WHEN NOT MATCHED THEN
             report_quarter,
             report_semester,
             report_year,
-            division_name,
             division_code,
-            product_department_name,
             product_department_code,
             sales_channel,
             client_target_group,
@@ -73,9 +64,7 @@ WHEN NOT MATCHED THEN
             source.report_quarter,
             source.report_semester,
             source.report_year,
-            source.division_name,
             source.division_code,
-            source.product_department_name,
             source.product_department_code,
             source.sales_channel,
             source.client_target_group,
